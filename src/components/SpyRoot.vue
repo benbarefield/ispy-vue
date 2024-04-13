@@ -67,7 +67,8 @@
             top: shape.y+'px',
             width: shape.width+'px',
             height: shape.height+'px',
-            backgroundColor: shape.color.value
+            backgroundColor: shape.color.value,
+            opacity: (!playing && shape !== pick) ? 0 : 1,
     }"/>
   </div>
 </template>
@@ -86,7 +87,7 @@
   cursor: pointer;
 
   box-shadow: 0 0 10px rgba(190, 204, 77, 0);
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.2s, opacity 0.3s;
 }
 .spyShape:hover {
   box-shadow: 0 0 10px rgba(234, 222, 100, 0.75);
