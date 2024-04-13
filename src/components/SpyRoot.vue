@@ -1,11 +1,13 @@
 <script setup>
-import {ref, shallowRef} from 'vue';
+  import {ref, shallowRef} from 'vue';
+
+  const rejections = [ "Nope!", "Not It", "Try again" ];
 
   const colors = {
     blue: {value: "#3333a8", display: "Blue"},
     green : {value: "#09bd33", display :"Green"},
     red : {value: "#c73636", display :"Red"},
-    orange :{value: "#c77111", display: "Orange"},
+    orange : {value: "#c77111", display: "Orange"},
   };
 
   const shapes = [
@@ -17,13 +19,12 @@ import {ref, shallowRef} from 'vue';
     {x: 150, y: 110, width: 30, height: 30, color: colors.orange},
   ];
 
-  const pick = shallowRef(shapes[0]);
-  const selectResult = ref(null);
+  const pick = shallowRef(shapes[Math.floor(Math.random() * shapes.length)]);
+  const selectResult = ref("");
 
   const shapeSelected = (shape) => {
     if(shape !== pick.value) {
-      selectResult.value = "Not it!";
-      console.log(shape, pick.value)
+      selectResult.value = rejections[Math.floor(Math.random() * rejections.length)];
       return;
     }
     selectResult.value = "That's it!";
@@ -33,11 +34,12 @@ import {ref, shallowRef} from 'vue';
 <template>
   <div>
     <div>I spy... something <span :style="{ color: pick.color.value }">{{ pick.color.display }}</span></div>
-    <div v-if="selectResult !== null">{{selectResult}}</div>
+    <div>{{selectResult}}</div>
   </div>
 
-  <div class="spyObjects">
+  <div class="spyObjectsContainer">
     <div v-for="shape in shapes"
+         class="spyShape"
          @click="shapeSelected(shape)"
          :style="{
             position: 'absolute',
@@ -51,11 +53,21 @@ import {ref, shallowRef} from 'vue';
 </template>
 
 <style scoped>
-.spyObjects {
+.spyObjectsContainer {
   position: relative;
   width: 500px;
   height: 500px;
   margin: 0 auto;
   border: 2px solid #333;
+}
+
+.spyShape {
+  position: absolute;
+
+  box-shadow: 0 0 10px rgba(190, 204, 77, 0);
+  transition: box-shadow 0.2s;
+}
+.spyShape:hover {
+  box-shadow: 0 0 10px rgba(190, 204, 77, 0.75);
 }
 </style>
