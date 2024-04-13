@@ -1,5 +1,6 @@
 <script setup>
   import {ref, shallowRef} from 'vue';
+  import Hints from "@/Utility/Hints.js";
 
   const rejections = [ "Nope!", "Not It", "Try again" ];
 
@@ -21,13 +22,16 @@
 
   const pick = shallowRef(shapes[Math.floor(Math.random() * shapes.length)]);
   const selectResult = ref("");
+  const hint = ref("");
 
   const shapeSelected = (shape) => {
-    if(shape !== pick.value) {
-      selectResult.value = rejections[Math.floor(Math.random() * rejections.length)];
+    if(shape === pick.value) {
+      selectResult.value = "That's it!";
       return;
     }
-    selectResult.value = "That's it!";
+
+    selectResult.value = rejections[Math.floor(Math.random() * rejections.length)];
+    hint.value = Hints(shape, pick.value);
   };
 </script>
 
@@ -35,6 +39,7 @@
   <div>
     <div>I spy... something <span :style="{ color: pick.color.value }">{{ pick.color.display }}</span></div>
     <div>{{selectResult}}</div>
+    <div>{{hint}}</div>
   </div>
 
   <div class="spyObjectsContainer">
