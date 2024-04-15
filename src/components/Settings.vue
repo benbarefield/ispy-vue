@@ -14,7 +14,7 @@
 
 <template>
   <div class="settingsContainer">
-    <h2>I Spy settings</h2>
+    <h2>I Spy</h2>
     <div class="setting">
       <label>Number of colors: </label>
       <input type="range" v-model="state.colors" min="1" max="5" />

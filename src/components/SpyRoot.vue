@@ -14,7 +14,6 @@
 
   const rejections = [ "Nope!", "Not It", "Try again" ];
 
-  console.log(props.state.colors);
   const shapes = ShapeCreation(500, 500, props.state.objects, 30, 110, 30, 110, colors.slice(0, props.state.colors));
 
   const playing = ref(true);
