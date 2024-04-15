@@ -1,6 +1,7 @@
 <script setup>
   import {ref, shallowRef} from 'vue';
   import Hints from "@/Utility/Hints.js";
+  import ShapeCreation from "@/Utility/ShapeCreation.js";
 
   const rejections = [ "Nope!", "Not It", "Try again" ];
 
@@ -11,14 +12,7 @@
     orange : {value: "#c77111", display: "Orange"},
   };
 
-  const shapes = [
-    {x: 10, y: 20, width: 15, height: 20, color: colors.blue},
-    {x: 50, y: 90, width: 30, height: 40, color: colors.green},
-    {x: 10, y: 200, width: 40, height: 20, color: colors.blue},
-    {x: 76, y: 174, width: 15, height: 15, color: colors.orange},
-    {x: 250, y: 125, width: 60, height: 45, color: colors.red},
-    {x: 150, y: 110, width: 30, height: 30, color: colors.orange},
-  ];
+  const shapes = ShapeCreation(500, 500, 30, 30, 110, 30, 110, Object.values(colors));
 
   const playing = ref(true);
   const pick = shallowRef(null);
@@ -34,7 +28,7 @@
     }
 
     selectResult.value = rejections[Math.floor(Math.random() * rejections.length)];
-    hint.value = Hints(shape, pick.value);
+    hint.value = shape.color === pick.value.color ? Hints(shape, pick.value) : "";
   };
 
   function startGame() {
