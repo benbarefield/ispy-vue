@@ -19,6 +19,6 @@ export default (canvasWidth, canvasHeight, numberOfShapes, minShapeWidth, maxSha
     }
     remaining -= toCreate;
   }
-console.log(shapes.length)
+
   return shapes;
 };

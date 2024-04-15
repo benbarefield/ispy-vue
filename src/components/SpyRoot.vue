@@ -1,18 +1,21 @@
 <script setup>
   import {ref, shallowRef} from 'vue';
-  import Hints from "@/Utility/Hints.js";
-  import ShapeCreation from "@/Utility/ShapeCreation.js";
+  import Hints from "@/Utility/hints.js";
+  import ShapeCreation from "@/Utility/shapeCreation.js";
+  import {colors, settingsContext} from "@/Utility/constants.js";
+
+  const props = defineProps({
+    state: {
+      objects: Number,
+      colors: Number,
+      context: String,
+    },
+  });
 
   const rejections = [ "Nope!", "Not It", "Try again" ];
 
-  const colors = {
-    blue: {value: "#3333a8", display: "Blue"},
-    green : {value: "#09bd33", display :"Green"},
-    red : {value: "#c73636", display :"Red"},
-    orange : {value: "#c77111", display: "Orange"},
-  };
-
-  const shapes = ShapeCreation(500, 500, 30, 30, 110, 30, 110, Object.values(colors));
+  console.log(props.state.colors);
+  const shapes = ShapeCreation(500, 500, props.state.objects, 30, 110, 30, 110, colors.slice(0, props.state.colors));
 
   const playing = ref(true);
   const pick = shallowRef(null);
@@ -41,62 +44,70 @@
 </script>
 
 <template>
-  <div v-if="playing">
-    <div>I spy... something <span :style="{ color: pick.color.value }">{{ pick.color.display }}</span></div>
-    <div>{{selectResult}}</div>
-    <div>{{hint}}</div>
-  </div>
-  <div v-if="!playing">
-    <div>{{selectResult}}</div>
-    <button @click="startGame">Try again</button>
-  </div>
+  <div class="gameContainer">
+    <div class="infoContainer">
+      <div>
+        <div v-if="playing">I spy... something <span :style="{ color: pick.color.value }">{{ pick.color.display }}</span></div>
+        <div>{{selectResult}}</div>
+        <div v-if="playing">{{hint}}</div>
+      </div>
+      <div>
+        <button v-if="!playing" @click="startGame">Try again</button>
+        <button @click="state.context = settingsContext">Back</button>
+      </div>
+    </div>
 
-  <div class="spyObjectsContainer">
-    <div v-for="shape in shapes"
-         class="spyShape"
-         @click="shapeSelected(shape)"
-         :style="{
-            position: 'absolute',
-            left: shape.x+'px',
-            top: shape.y+'px',
-            width: shape.width+'px',
-            height: shape.height+'px',
-            backgroundColor: shape.color.value,
-            opacity: (!playing && shape !== pick) ? 0 : 1,
-    }"/>
+    <div class="spyObjectsContainer">
+      <div v-for="shape in shapes"
+           class="spyShape"
+           @click="shapeSelected(shape)"
+           :style="{
+              position: 'absolute',
+              left: shape.x+'px',
+              top: shape.y+'px',
+              width: shape.width+'px',
+              height: shape.height+'px',
+              backgroundColor: shape.color.value,
+              opacity: (!playing && shape !== pick) ? 0 : 1,
+      }"/>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.spyObjectsContainer {
-  position: relative;
-  width: 500px;
-  height: 500px;
-  margin: 0 auto;
-  border: 2px solid #333;
-}
+  .gameContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100vh;
+    justify-content: center;
+  }
 
-.spyShape {
-  position: absolute;
-  cursor: pointer;
+  .infoContainer {
+    flex: 0 0 auto;
+    margin-right: 50px;
+    text-align: right;
+  }
 
-  box-shadow: 0 0 10px rgba(190, 204, 77, 0);
-  transition: box-shadow 0.2s, opacity 0.3s;
-}
-.spyShape:hover {
-  box-shadow: 0 0 10px rgba(234, 222, 100, 0.75);
-}
+  .spyObjectsContainer {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    border: 2px solid #333;
+  }
 
-button {
-  border: 1px solid var(--color-text);
-  color: var(--color-text);
-  background: var(--color-background);
-  cursor: pointer;
-  transition: border-color 0.2s;
-  box-sizing: border-box;
-  padding: 6px 12px;
-}
-button:hover {
-  border-color: var(--vt-c-indigo);
-}
+  .spyShape {
+    position: absolute;
+    cursor: pointer;
+
+    box-shadow: 0 0 10px rgba(190, 204, 77, 0);
+    transition: box-shadow 0.2s, opacity 0.3s;
+  }
+  .spyShape:hover {
+    box-shadow: 0 0 10px rgba(234, 222, 100, 0.75);
+  }
+
+  button:not(:last-of-type) {
+    margin-right: 10px;
+  }
 </style>
